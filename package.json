@@ -2,10 +2,12 @@
   "name": "spcs-ticket-peeper",
   "version": "1.0.0",
   "main": "src/index.js",
+  "type": "module",
   "scripts": {
     "serve": "tsx watch src/index.js",
     "lint": "eslint --fix src",
-    "build": "tsc"
+    "build": "tsc",
+    "build-run": "yarn build && node dist/index.js"
   },
   "license": "MIT",
   "dependencies": {
