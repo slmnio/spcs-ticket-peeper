@@ -96,7 +96,7 @@ if (process.env.SPCS_AIRTABLE_KEY && process.env.SPCS_AIRTABLE_APP && process.en
             offRoleData.forEach((record) => {
                 if (store.has(record.id)) return;
 
-                messages.push(`📊 New off role application from **${record.get("Player Discord Tag")}**${record.get("Team Name") ? ` on **${record.get("Team Name")}**` : "" }: ${record.get("Rank on Highest Role")} on ${record.get("Highest Role")} requesting ${record.get("Requested Role")} (${record.get("Rank on Requested Role")}) [See on Airtable](<https://airtable.com/appHuNcTOEhu8yXqI/tblD3g24fpM5uviL1/viwsLHWMcze8imHPp/${record.id}?blocks=hide>)`)
+                messages.push(`📊 New off role application from **${record.get("Player Discord Tag")}**${record.get("Team Name") ? ` on **${record.get("Team Name")}**` : "" } (${record.get("Competition Division")}): ${record.get("Rank on Highest Role")} on ${record.get("Highest Role")}, requesting ${record.get("Requested Role")} (${record.get("Rank on Requested Role")}) [See on Airtable](<https://airtable.com/appHuNcTOEhu8yXqI/tblD3g24fpM5uviL1/viwsLHWMcze8imHPp/${record.id}?blocks=hide>)`)
                 store.set(record.id, record.fields);
             })
 
