@@ -45,11 +45,12 @@ if (process.env.SPCS_AIRTABLE_KEY && process.env.SPCS_AIRTABLE_APP && process.en
     const store = new Map();
 
     await checkLoop();
-    setInterval(() => checkLoop(), 10_000);
+    setInterval(() => checkLoop(), 120_000);
 
     async function checkLoop() {
         const applicationData = await base.table("Series 3 Team Applications").select().all();
         const rosterData = await base.table("Series 3 Roster Submissions").select().all();
+        const offRoleData = await base.table("Series 3 Off Role Application").select().all();
 
         const messages: string[] = [];
 
@@ -60,6 +61,9 @@ if (process.env.SPCS_AIRTABLE_KEY && process.env.SPCS_AIRTABLE_APP && process.en
                 store.set(record.id, record.fields);
             })
             rosterData.forEach((record) => {
+                store.set(record.id, record.fields);
+            })
+            offRoleData.forEach((record) => {
                 store.set(record.id, record.fields);
             })
             console.log(`[airtable] First run - ${store.size} items saved`)
@@ -85,6 +89,14 @@ if (process.env.SPCS_AIRTABLE_KEY && process.env.SPCS_AIRTABLE_APP && process.en
                 })
 
                 messages.push(`📝 New roster submission for ${(record.get("Competition Division")?.toString())?.split(' ')?.[0]}: **${record.get("Team Name") || "(unknown)"}** by ${[record.get("Team Manager (Discord Tag)") || null].filter(s => !!s).join("/")} with ${playerCount} player${playerCount === 1 ? '' : 's'}. [See on Airtable](<https://airtable.com/appHuNcTOEhu8yXqI/tbllX1IjY8YNvJY75/viwDOZV5dKjguXQp2/${record.id}?blocks=hide>)`)
+                store.set(record.id, record.fields);
+            })
+
+
+            offRoleData.forEach((record) => {
+                if (store.has(record.id)) return;
+
+                messages.push(`📊 New off role application from **${record.get("Player Discord Tag")}**${record.get("Team Name") ? ` on **${record.get("Team Name")}**` : "" }: ${record.get("Rank on Highest Role")} on ${record.get("Highest Role")} requesting ${record.get("Requested Role")} (${record.get("Rank on Requested Role")}) [See on Airtable](<https://airtable.com/appHuNcTOEhu8yXqI/tblD3g24fpM5uviL1/viwsLHWMcze8imHPp/${record.id}?blocks=hide>)`)
                 store.set(record.id, record.fields);
             })
 
